@@ -70,18 +70,18 @@ return (
         ) : (
         <>
             <div className="space-y-2">
-            <div className="flex items-center space-x-1">
+            <div className="flex items-center space-x-3">
                 {[1, 2, 3, 4, 5].map((star) => (
                 <Button
                     key={star}
                     variant="ghost"
-                    size="sm"
+                    size="lg"
                     onClick={() => handleRate(star)}
-                    className={`p-0 hover:bg-transparent group ${
+                    className={`p-1 w-auto h-auto hover:bg-transparent group ${
                     star <= rating ? 'text-yellow-400' : 'text-gray-500'
                     }`}
                 >
-                    <StarIcon className="h-5 w-5 group-hover:text-yellow-400 transition-colors lg:h-5 lg:w-5 md:h-4 md:w-4 sm:h-3 sm:w-3" />
+                    <StarIcon className="h-12 w-12 group-hover:text-yellow-400 transition-colors lg:h-12 lg:w-12 md:h-10 md:w-10 sm:h-8 sm:w-8" />
                 </Button>
                 ))}
             </div>
