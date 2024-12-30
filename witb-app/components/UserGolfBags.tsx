@@ -1,48 +1,74 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import { GolfBagCard } from '@/components/GolfBagCard'
+import { AddSetupButton } from '@/components/AddSetupButton'
 
 interface UserSetup {
-id: number
-imageUrl: string
-author: string
-uploadedAt: string
-averageRating: number
-averageHandicapGuess: number
+  id: number
+  image_url: string
+  user_id: string
+  created_at: string
+  average_rating: number
+  average_handicap_guess: number
 }
 
-const userSetups: UserSetup[] = [
-{
-id: 1,
-imageUrl: '/placeholder.svg?height=600&width=400',
-author: 'CurrentUser',
-uploadedAt: '2023-12-20T10:00:00Z',
-averageRating: 4.2,
-averageHandicapGuess: 8.5
-},
-{
-id: 2,
-imageUrl: '/placeholder.svg?height=600&width=400',
-author: 'CurrentUser',
-uploadedAt: '2023-12-15T14:30:00Z',
-averageRating: 3.8,
-averageHandicapGuess: 12.3
-},
-]
-
 export function UserGolfBags() {
-return (
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
-    {userSetups.map((setup) => (
-    <GolfBagCard
-        key={setup.id}
-        imageUrl={setup.imageUrl}
-        author={setup.author}
-        uploadedAt={setup.uploadedAt}
-        averageRating={setup.averageRating}
-        averageHandicapGuess={setup.averageHandicapGuess}
-        isProfileView={true}
-    />
-    ))}
-</div>
-)
+  const [setups, setSetups] = useState<UserSetup[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchUserSetups() {
+      try {
+        const response = await fetch('/api/user/golfbags')
+        if (!response.ok) {
+          throw new Error('Failed to fetch golf bags')
+        }
+        const data = await response.json()
+        setSetups(data)
+      } catch (error) {
+        console.error('Error fetching setups:', error)
+        setError('Failed to load your golf bags')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUserSetups()
+  }, [])
+
+  if (loading) {
+    return <div className="text-center text-gray-400">Loading...</div>
+  }
+
+  if (error) {
+    return <div className="text-center text-red-400">{error}</div>
+  }
+
+  if (setups.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center space-y-4 p-8">
+        <p className="text-gray-400 text-lg">You haven't added any golf bags yet.</p>
+        <AddSetupButton />
+      </div>
+    )
+  }
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
+      {setups.map((setup) => (
+        <GolfBagCard
+          key={setup.id}
+          imageUrl={setup.image_url}
+          author="You"
+          uploadedAt={setup.created_at}
+          averageRating={setup.average_rating}
+          averageHandicapGuess={setup.average_handicap_guess}
+          isProfileView={true}
+        />
+      ))}
+    </div>
+  )
 }
 

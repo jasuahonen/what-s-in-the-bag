@@ -38,7 +38,7 @@ export function Header() {
               </Button>
             </Link>
           ) : (
-            <SignInButton mode="modal" afterSignInUrl="/profile">
+            <SignInButton>
               <Button variant="ghost" className="text-gray-200 hover:text-white hover:bg-gray-800">
                 Sign In
               </Button>
