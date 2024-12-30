@@ -7,7 +7,9 @@ export default function Home() {
       <Header />
       <main className="container mx-auto px-4 py-10">
         <div className="mb-8 flex flex-col items-center space-y-4">
-          <h1 className="text-3xl font-bold text-gray-50 text-center sm:text-2xl md:text-[2.55rem]">What's in the bag?</h1>
+          <h1 className="text-2xl md:text-3xl lg:text-[2.55rem] font-bold text-gray-50 text-center">
+            What's in the bag?
+          </h1>
         </div>
         <GolfBagFeed />
       </main>

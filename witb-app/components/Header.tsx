@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { SignInButton } from '@clerk/nextjs'
@@ -12,7 +13,13 @@ export function Header() {
     <header className="bg-black shadow-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center space-x-4">
-          <div className="w-10 h-10 bg-gray-700 rounded-full"></div>
+        <Image
+            src="/witb.png"
+            alt="WITB Logo"
+            width={50}
+            height={50}
+            className="rounded-full"
+          />
           <Link href="/" className="text-2xl font-bold text-gray-50 scale-125">
             WITB
           </Link>
