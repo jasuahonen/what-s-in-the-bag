@@ -50,7 +50,6 @@ export function UserGolfBags() {
     return (
       <div className="flex flex-col items-center justify-center space-y-4 p-8">
         <p className="text-gray-400 text-lg">You haven't added any golf bags yet.</p>
-        <AddSetupButton />
       </div>
     )
   }
