@@ -59,12 +59,16 @@ export function UserGolfBags() {
       {setups.map((setup) => (
         <GolfBagCard
           key={setup.id}
+          id={setup.id}
           imageUrl={setup.image_url}
           author="You"
           uploadedAt={setup.created_at}
           averageRating={setup.average_rating}
           averageHandicapGuess={setup.average_handicap_guess}
           isProfileView={true}
+          onDelete={() => {
+            setSetups(setups.filter(s => s.id !== setup.id))
+          }}
         />
       ))}
     </div>
