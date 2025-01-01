@@ -5,55 +5,76 @@ import { GolfBagCard } from '@/components/GolfBagCard'
 import { FilterToggle } from '@/components/FilterToggle'
 
 interface GolfBag {
-id: number
-imageUrl: string
-author: string
-uploadedAt: string
-averageRating: number
-averageHandicapGuess: number
+  id: number
+  image_url: string
+  user_id: string
+  created_at: string
+  average_rating: number
+  average_handicap_guess: number
 }
 
 export function GolfBagFeed() {
-const [filter, setFilter] = useState<'latest' | 'best' | 'worst'>('latest')
-const [golfBags, setGolfBags] = useState<GolfBag[]>([])
+  const [filter, setFilter] = useState<'latest' | 'best' | 'worst'>('latest')
+  const [golfBags, setGolfBags] = useState<GolfBag[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-useEffect(() => {
-async function fetchGolfBags() {
-    const response = await fetch('/api/golfbags')
-    const data = await response.json()
-    setGolfBags(data)
-}
-fetchGolfBags()
-}, [])
+  useEffect(() => {
+    async function fetchGolfBags() {
+      try {
+        const response = await fetch('/api/golfbags')
+        if (!response.ok) {
+          throw new Error('Failed to fetch golf bags')
+        }
+        const data = await response.json()
+        setGolfBags(data)
+      } catch (err) {
+        console.error('Error fetching golf bags:', err)
+        setError('Failed to load golf bags')
+      } finally {
+        setLoading(false)
+      }
+    }
 
-const sortedSetups = [...golfBags].sort((a, b) => {
-if (filter === 'latest') {
-    return new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
-} else if (filter === 'best') {
-    return b.averageRating - a.averageRating
-} else {
-    return a.averageRating - b.averageRating
-}
-})
+    fetchGolfBags()
+  }, [])
 
-return (
-<div>
-    <div className="mb-6 flex justify-center">
-    <FilterToggle onFilterChange={setFilter} />
+  if (loading) {
+    return <div className="text-center text-gray-400">Loading...</div>
+  }
+
+  if (error) {
+    return <div className="text-center text-red-400">{error}</div>
+  }
+
+  const sortedBags = [...golfBags].sort((a, b) => {
+    if (filter === 'latest') {
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    } else if (filter === 'best') {
+      return b.average_rating - a.average_rating
+    } else {
+      return a.average_rating - b.average_rating
+    }
+  })
+
+  return (
+    <div>
+      <div className="mb-6 flex justify-center">
+        <FilterToggle onFilterChange={setFilter} />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
+        {sortedBags.map((bag) => (
+          <GolfBagCard
+            key={bag.id}
+            imageUrl={bag.image_url}
+            author={bag.user_id}
+            uploadedAt={bag.created_at}
+            averageRating={bag.average_rating}
+            averageHandicapGuess={bag.average_handicap_guess}
+          />
+        ))}
+      </div>
     </div>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
-    {sortedSetups.map((setup) => (
-        <GolfBagCard
-        key={setup.id}
-        imageUrl={setup.imageUrl}
-        author={setup.author}
-        uploadedAt={setup.uploadedAt}
-        averageRating={setup.averageRating}
-        averageHandicapGuess={setup.averageHandicapGuess}
-        />
-    ))}
-    </div>
-</div>
-)
+  )
 }
 
