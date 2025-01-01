@@ -58,6 +58,8 @@ export function AddSetupButton() {
 
       console.log('Upload successful:', responseData)
       setShowSuccess(true)
+
+      // Just refresh the router, don't reload the page
       router.refresh()
 
       // Hide success message after 3 seconds

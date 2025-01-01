@@ -3,11 +3,13 @@
 import { useEffect, useState } from 'react'
 import { GolfBagCard } from '@/components/GolfBagCard'
 import { AddSetupButton } from '@/components/AddSetupButton'
+import { useRouter } from 'next/navigation'
 
 interface UserSetup {
   id: number
   image_url: string
   user_id: string
+  username: string
   created_at: string
   average_rating: number
   average_handicap_guess: number
@@ -17,6 +19,7 @@ export function UserGolfBags() {
   const [setups, setSetups] = useState<UserSetup[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
     async function fetchUserSetups() {
@@ -36,7 +39,7 @@ export function UserGolfBags() {
     }
 
     fetchUserSetups()
-  }, [])
+  }, [router])
 
   if (loading) {
     return <div className="text-center text-gray-400">Loading...</div>
@@ -61,7 +64,7 @@ export function UserGolfBags() {
           key={setup.id}
           id={setup.id}
           imageUrl={setup.image_url}
-          author="You"
+          author={setup.username || 'You'}
           uploadedAt={setup.created_at}
           averageRating={setup.average_rating}
           averageHandicapGuess={setup.average_handicap_guess}

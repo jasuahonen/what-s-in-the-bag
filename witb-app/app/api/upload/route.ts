@@ -1,13 +1,12 @@
 import { getAuth } from '@clerk/nextjs/server'
+import { clerkClient } from '@clerk/clerk-sdk-node'
 import { NextResponse } from 'next/server'
 import { getAuthenticatedClient } from '@/lib/supabase'
 import { NextRequest } from 'next/server'
-import { getClerkClient } from '@clerk/nextjs/server'
 
 export async function POST(request: NextRequest) {
   try {
     const { userId } = await getAuth(request)
-    const clerkClient = await getClerkClient()
 
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
