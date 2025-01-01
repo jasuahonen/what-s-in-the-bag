@@ -2,14 +2,21 @@ import { getAuth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import { getAuthenticatedClient } from '@/lib/supabase'
 import { NextRequest } from 'next/server'
+import { getClerkClient } from '@clerk/nextjs/server'
 
 export async function POST(request: NextRequest) {
-  const { userId } = await getAuth(request)
-  if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
   try {
+    const { userId } = await getAuth(request)
+    const clerkClient = await getClerkClient()
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // Get user data from Clerk
+    const user = await clerkClient.users.getUser(userId)
+    const username = user.username || `${user.firstName} ${user.lastName}`.trim() || 'Anonymous'
+
     const supabase = await getAuthenticatedClient(request)
     const formData = await request.formData()
     const file = formData.get('file') as File
@@ -67,6 +74,7 @@ export async function POST(request: NextRequest) {
       .from('golf_bags')
       .insert([{
         user_id: userId,
+        username: username,
         image_url: imageUrl,
         average_rating: 0,
         average_handicap_guess: 0,

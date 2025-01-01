@@ -8,6 +8,7 @@ interface GolfBag {
   id: number
   image_url: string
   user_id: string
+  username: string
   created_at: string
   average_rating: number
   average_handicap_guess: number
@@ -66,8 +67,9 @@ export function GolfBagFeed() {
         {sortedBags.map((bag) => (
           <GolfBagCard
             key={bag.id}
+            id={bag.id}
             imageUrl={bag.image_url}
-            author={bag.user_id}
+            author={bag.username || 'Anonymous'}
             uploadedAt={bag.created_at}
             averageRating={bag.average_rating}
             averageHandicapGuess={bag.average_handicap_guess}
