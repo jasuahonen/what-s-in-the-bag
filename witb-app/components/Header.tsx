@@ -13,7 +13,7 @@ export function Header() {
     <header className="bg-black shadow-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center space-x-4">
-        <Image
+          <Image
             src="/witb.png"
             alt="WITB Logo"
             width={50}
@@ -26,20 +26,20 @@ export function Header() {
         </div>
         <nav className="flex items-center space-x-4">
           <Link href="/" passHref>
-            <Button variant="ghost" className="text-gray-200 hover:text-white hover:bg-gray-800">
+            <Button variant="ghost" className="text-gray-200 hover:text-white hover:bg-gray-800 text-sm md:text-base lg:text-lg xl:text-xl">
               Home
             </Button>
           </Link>
 
           {isSignedIn ? (
             <Link href="/profile" passHref>
-              <Button variant="ghost" className="text-gray-200 hover:text-white hover:bg-gray-800">
+              <Button variant="ghost" className="text-gray-200 hover:text-white hover:bg-gray-800 text-sm md:text-base lg:text-lg xl:text-xl">
                 Profile
               </Button>
             </Link>
           ) : (
             <SignInButton>
-              <Button variant="ghost" className="text-gray-200 hover:text-white hover:bg-gray-800">
+              <Button variant="ghost" className="text-gray-200 hover:text-white hover:bg-gray-800 text-sm md:text-base lg:text-lg xl:text-xl">
                 Sign In
               </Button>
             </SignInButton>
@@ -49,4 +49,3 @@ export function Header() {
     </header>
   )
 }
-
