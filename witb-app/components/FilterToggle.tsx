@@ -21,7 +21,7 @@ return (
     <Button
     variant={activeFilter === 'latest' ? 'default' : 'outline'}
     onClick={() => handleFilterChange('latest')}
-    className="text-xs lg:text-sm md:text-xs sm:text-[10px]"
+    className="text-yellow-400 bg-gray-800 hover:bg-black text-xs lg:text-sm md:text-xs sm:text-[10px]"
     >
     <Clock className="mr-2 h-4 w-4 lg:h-4 lg:w-4 md:h-3 md:w-3 sm:h-2 sm:w-2" />
     Latest
@@ -29,7 +29,7 @@ return (
     <Button
     variant={activeFilter === 'best' ? 'default' : 'outline'}
     onClick={() => handleFilterChange('best')}
-    className="text-xs lg:text-sm md:text-xs sm:text-[10px]"
+    className="text-yellow-400 bg-gray-800 hover:bg-black text-xs lg:text-sm md:text-xs sm:text-[10px]"
     >
     <ArrowUp className="mr-2 h-4 w-4 lg:h-4 lg:w-4 md:h-3 md:w-3 sm:h-2 sm:w-2" />
     Best Bags
@@ -37,7 +37,7 @@ return (
     <Button
     variant={activeFilter === 'worst' ? 'default' : 'outline'}
     onClick={() => handleFilterChange('worst')}
-    className="text-xs lg:text-sm md:text-xs sm:text-[10px]"
+    className="text-yellow-400 bg-gray-800 hover:bg-black text-xs lg:text-sm md:text-xs sm:text-[10px]"
     >
     <ArrowDown className="mr-2 h-4 w-4 lg:h-4 lg:w-4 md:h-3 md:w-3 sm:h-2 sm:w-2" />
     Worst Bags

@@ -78,18 +78,16 @@ export function AddSetupButton() {
       <Button
         onClick={handleFileSelect}
         disabled={isUploading}
-        className={`${
-          showSuccess ? 'bg-green-600' : 'bg-green-600 hover:bg-green-700'
-        } text-white lg:text-base md:text-sm sm:text-xs transition-colors duration-200`}
+        className="border border-gray-600 rounded-lg text-yellow-400 bg-gray-800 hover:bg-black transition-colors duration-200"
       >
         {showSuccess ? (
           <>
-            <Check className="mr-2 h-4 w-4 lg:h-4 lg:w-4 md:h-3 md:w-3 sm:h-2 sm:w-2" />
+            <Check className="mr-2 h-4 w-4" />
             Added Successfully!
           </>
         ) : (
           <>
-            <PlusCircle className="mr-2 h-4 w-4 lg:h-4 lg:w-4 md:h-3 md:w-3 sm:h-2 sm:w-2" />
+            <PlusCircle className="mr-2 h-4 w-4" />
             {isUploading ? 'Uploading...' : 'Add a New Bag'}
           </>
         )}

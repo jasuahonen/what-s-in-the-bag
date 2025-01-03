@@ -89,7 +89,7 @@ export function GolfBagCard({
             disabled={isDeleting}
             variant="destructive"
             size="icon"
-            className="absolute top-2 right-2 bg-red-600 hover:bg-red-700"
+            className="absolute top-2 right-2 bg-grey-800 hover:bg-black"
           >
             <Trash2 className="h-4 w-4" />
           </Button>

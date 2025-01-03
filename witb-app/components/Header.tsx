@@ -21,7 +21,7 @@ export function Header() {
             className="rounded-full"
           />
           <Link href="/" className="text-2xl font-bold text-gray-50 scale-125">
-            WITB
+            RateMyBag
           </Link>
         </div>
         <nav className="flex items-center space-x-4">
