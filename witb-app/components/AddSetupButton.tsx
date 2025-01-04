@@ -3,6 +3,8 @@
 import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { PlusCircle, Check, Upload } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@clerk/nextjs'
 import {
   Dialog,
   DialogContent,
@@ -17,23 +19,12 @@ export function AddSetupButton() {
   const [showSuccess, setShowSuccess] = useState(false)
   const [open, setOpen] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const router = useRouter()
+  const { userId } = useAuth()
 
-  const handleFileSelect = async () => {
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      const input = document.createElement('input')
-      input.type = 'file'
-      input.accept = 'image/*'
-
-      const fileSelected = new Promise<File | null>((resolve) => {
-        input.onchange = (e) => {
-          const files = (e.target as HTMLInputElement).files
-          resolve(files?.[0] || null)
-        }
-      })
-
-      input.click()
-
-      const file = await fileSelected
+      const file = event.target.files?.[0]
       if (!file || !userId) {
         console.error('No file selected or user not authenticated')
         return
@@ -64,16 +55,14 @@ export function AddSetupButton() {
 
       console.log('Upload successful:', responseData)
       setShowSuccess(true)
-
-      // Just refresh the router, don't reload the page
       router.refresh()
 
-      // Hide success message after 3 seconds
       setTimeout(() => {
         setShowSuccess(false)
       }, 3000)
     } catch (error) {
       console.error('Upload error:', error)
+      alert('Failed to upload image')
     } finally {
       setIsUploading(false)
     }
@@ -103,11 +92,17 @@ export function AddSetupButton() {
             Add a New Bag
           </Button>
         </DialogTrigger>
-        <DialogContent className="bg-gray-900 text-gray-100 border-gray-800 max-w-md">
+        <DialogContent
+          className="bg-gray-900 text-gray-100 border-gray-800 max-w-md"
+          aria-describedby="dialog-description"
+        >
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-yellow-400 mb-4">
               Before You Add Your Golf Bag
             </DialogTitle>
+            <p id="dialog-description" className="sr-only">
+              Instructions for uploading your golf bag photo and information about the rating system
+            </p>
           </DialogHeader>
           <div className="space-y-4">
             <div>

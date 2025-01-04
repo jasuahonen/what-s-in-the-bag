@@ -28,7 +28,13 @@ export function GolfBagFeed() {
           throw new Error('Failed to fetch golf bags')
         }
         const data = await response.json()
-        setGolfBags(data)
+        // Ensure default values for averages
+        const bagsWithDefaults = data.map((bag: GolfBag) => ({
+          ...bag,
+          average_rating: bag.average_rating || 0,
+          average_handicap_guess: bag.average_handicap_guess || 0
+        }))
+        setGolfBags(bagsWithDefaults)
       } catch (err) {
         console.error('Error fetching golf bags:', err)
         setError('Failed to load golf bags')
@@ -52,9 +58,9 @@ export function GolfBagFeed() {
     if (filter === 'latest') {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     } else if (filter === 'best') {
-      return b.average_rating - a.average_rating
+      return (b.average_rating || 0) - (a.average_rating || 0)
     } else {
-      return a.average_rating - b.average_rating
+      return (a.average_rating || 0) - (b.average_rating || 0)
     }
   })
 
@@ -71,8 +77,18 @@ export function GolfBagFeed() {
             imageUrl={bag.image_url}
             author={bag.username || 'Anonymous'}
             uploadedAt={bag.created_at}
-            averageRating={bag.average_rating}
-            averageHandicapGuess={bag.average_handicap_guess}
+            averageRating={bag.average_rating || 0}
+            averageHandicapGuess={bag.average_handicap_guess || 0}
+            onRatingUpdate={(newAverage) => {
+              setGolfBags(golfBags.map(b =>
+                b.id === bag.id ? { ...b, average_rating: newAverage } : b
+              ))
+            }}
+            onHandicapGuessUpdate={(newAverage) => {
+              setGolfBags(golfBags.map(b =>
+                b.id === bag.id ? { ...b, average_handicap_guess: newAverage } : b
+              ))
+            }}
           />
         ))}
       </div>
