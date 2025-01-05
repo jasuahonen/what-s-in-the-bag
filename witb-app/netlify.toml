@@ -1,5 +1,5 @@
 [build]
-  base = "witb-app"
+  base = "./witb-app"
   command = "npm run build"
   publish = ".next"
 
