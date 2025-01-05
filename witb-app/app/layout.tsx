@@ -11,7 +11,7 @@ const outfit = Outfit({
 })
 
 export const metadata: Metadata = {
-  title: 'WITB - What\'s In The Bag',
+  title: 'RMB - Rate My Bag',
   description: 'Showcase your golf bag setups',
 }
 
