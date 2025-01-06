@@ -39,6 +39,8 @@ export function GolfBagCard({
   const [hasRated, setHasRated] = useState(false)
   const [hasGuessedHandicap, setHasGuessedHandicap] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [previewRating, setPreviewRating] = useState(0)
+  const [selectedRating, setSelectedRating] = useState(0)
   const router = useRouter()
 
   useEffect(() => {
@@ -203,62 +205,85 @@ export function GolfBagCard({
             </div>
           ) : (
             <>
-              <div className="space-y-2">
-                {hasRated ? (
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <Check className="h-5 w-5 text-green-400" />
-                      <span className="text-sm text-green-400">You've rated this bag</span>
+              <div className="flex flex-col space-y-6">
+                {/* Rating Section */}
+                <div className="flex flex-col space-y-2">
+                  {hasRated ? (
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <Check className="h-5 w-5 text-green-400" />
+                        <span className="text-sm text-green-400">You've rated this bag</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-300">Average Rating:</span>
+                        <span className="text-sm font-semibold text-yellow-400">{averageRating.toFixed(1)} / 5</span>
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-300">Average Rating:</span>
-                      <span className="text-sm font-semibold text-yellow-400">{averageRating.toFixed(1)} / 5</span>
+                  ) : (
+                    <>
+                      <span className="text-sm text-gray-400">Rate this bag</span>
+                      <div className="flex items-center space-x-4">
+                        <div className="flex items-center">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Button
+                              key={star}
+                              variant="ghost"
+                              onClick={() => setSelectedRating(star)}
+                              className={`p-1 hover:bg-transparent ${
+                                star <= selectedRating ? 'text-yellow-400' : 'text-gray-600'
+                              }`}
+                            >
+                              <StarIcon className="h-14 w-14 transition-colors" />
+                            </Button>
+                          ))}
+                        </div>
+                        {selectedRating > 0 && (
+                          <Button
+                            onClick={() => handleRate(selectedRating)}
+                            className="bg-yellow-400 text-gray-900 hover:bg-yellow-500 px-6"
+                          >
+                            Rate
+                          </Button>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Handicap Guess Section */}
+                <div className="flex flex-col space-y-2">
+                  {hasGuessedHandicap ? (
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <Check className="h-5 w-5 text-green-400" />
+                        <span className="text-sm text-green-400">You've guessed the handicap</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-300">Average Handicap Guess:</span>
+                        <span className="text-sm font-semibold text-yellow-400">{averageHandicapGuess.toFixed(1)}</span>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center space-x-3">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Button
-                        key={star}
-                        variant="ghost"
-                        size="lg"
-                        onClick={() => handleRate(star)}
-                        className={`p-1 w-auto h-auto hover:bg-transparent group ${
-                          star <= rating ? 'text-yellow-400' : 'text-gray-500'
-                        }`}
-                      >
-                        <StarIcon className="h-12 w-12 group-hover:text-yellow-400 transition-colors lg:h-12 lg:w-12 md:h-10 md:w-10 sm:h-8 sm:w-8" />
-                      </Button>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <div className="space-y-2">
-                {hasGuessedHandicap ? (
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <Check className="h-5 w-5 text-green-400" />
-                      <span className="text-sm text-green-400">You've guessed the handicap</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-300">Average Handicap Guess:</span>
-                      <span className="text-sm font-semibold text-yellow-400">{averageHandicapGuess.toFixed(1)}</span>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center space-x-2">
-                    <Input
-                      type="number"
-                      placeholder="Guess handicap"
-                      value={handicapGuess}
-                      onChange={(e) => setHandicapGuess(e.target.value)}
-                      className="w-32 bg-gray-700 text-white border-gray-600 text-sm lg:text-sm md:text-xs sm:text-[10px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    />
-                    <Button onClick={handleHandicapGuess} variant="secondary" size="sm" className="text-xs lg:text-sm md:text-xs sm:text-[10px]">
-                      Guess
-                    </Button>
-                  </div>
-                )}
+                  ) : (
+                    <>
+                      <span className="text-sm text-gray-400">Guess their handicap</span>
+                      <div className="flex items-center space-x-4">
+                        <Input
+                          type="number"
+                          placeholder="Enter handicap"
+                          value={handicapGuess}
+                          onChange={(e) => setHandicapGuess(e.target.value)}
+                          className="bg-gray-700 border-gray-600 text-white focus:ring-yellow-400 focus:border-yellow-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        />
+                        <Button
+                          onClick={handleHandicapGuess}
+                          className="bg-yellow-400 text-gray-900 hover:bg-yellow-500 px-6"
+                        >
+                          Guess
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
             </>
           )}
