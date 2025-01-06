@@ -14,13 +14,16 @@ export function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center space-x-4">
           <Image
-            src="/witb.png"
-            alt="WITB Logo"
-            width={50}
-            height={50}
+            src="/ratemybag.png"
+            alt="RMB Logo"
+            width={65}
+            height={65}
             className="rounded-full"
           />
-          <Link href="/" className="text-2xl font-bold text-gray-50 scale-125">
+          <Link
+            href="/"
+            className="text-lg md:text-xl lg:text-2xl text-gray-50 scale-100 md:scale-110 lg:scale-125 transition-transform"
+          >
             RateMyBag
           </Link>
         </div>
