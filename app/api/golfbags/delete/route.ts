@@ -20,6 +20,28 @@ export async function DELETE(request: NextRequest) {
     // Extract filename from the URL
     const fileName = imageUrl.split('/').pop()
 
+    // First delete related ratings
+    const { error: ratingsError } = await supabase
+      .from('ratings')
+      .delete()
+      .eq('golf_bag_id', bagId)
+
+    if (ratingsError) {
+      console.error('Ratings deletion error:', ratingsError)
+      return NextResponse.json({ error: 'Failed to delete ratings' }, { status: 500 })
+    }
+
+    // Then delete related handicap guesses
+    const { error: guessesError } = await supabase
+      .from('handicap_guesses')
+      .delete()
+      .eq('golf_bag_id', bagId)
+
+    if (guessesError) {
+      console.error('Handicap guesses deletion error:', guessesError)
+      return NextResponse.json({ error: 'Failed to delete handicap guesses' }, { status: 500 })
+    }
+
     // Delete the image from storage
     const { error: storageError } = await supabase.storage
       .from('golf_bags')
@@ -30,12 +52,12 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to delete image' }, { status: 500 })
     }
 
-    // Delete the database record
+    // Finally delete the golf bag record
     const { error: dbError } = await supabase
       .from('golf_bags')
       .delete()
       .eq('id', bagId)
-      .eq('user_id', userId) // Ensure user owns the bag
+      .eq('user_id', userId)
 
     if (dbError) {
       console.error('Database deletion error:', dbError)

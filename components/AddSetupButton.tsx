@@ -49,17 +49,24 @@ export function AddSetupButton() {
       const responseData = await uploadResponse.json()
 
       if (!uploadResponse.ok) {
-        console.error('Upload failed:', responseData)
         throw new Error(responseData.error || 'Upload failed')
       }
 
-      console.log('Upload successful:', responseData)
       setShowSuccess(true)
-      router.refresh()
 
-      setTimeout(() => {
-        setShowSuccess(false)
-      }, 3000)
+      // Wait for the success message to be visible
+      await new Promise(resolve => setTimeout(resolve, 1500))
+
+      // Reset form state
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+      setShowSuccess(false)
+      setOpen(false)
+
+      // Redirect to home page
+      router.push('/')
+
     } catch (error) {
       console.error('Upload error:', error)
       alert('Failed to upload image')
