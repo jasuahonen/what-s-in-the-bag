@@ -18,6 +18,7 @@ export function Header() {
             alt="RMB Logo"
             width={65}
             height={65}
+            priority={true}
             className="rounded-full"
           />
           <Link
